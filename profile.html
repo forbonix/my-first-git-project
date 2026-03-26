@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | ThaniyamHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --profile-sidebar-w: 260px;
+        }
+
+        body {
+            background: #f4f6f8;
+            min-height: 100vh;
+        }
+
+        /* ── ACCOUNT LAYOUT ── */
+        .account-wrapper {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: var(--profile-sidebar-w) 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        /* ── SIDEBAR ── */
+        .profile-sidebar {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .07);
+            position: sticky;
+            top: 80px;
+        }
+
+        .profile-avatar-box {
+            background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: white;
+        }
+
+        .avatar-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .25);
+            border: 3px solid rgba(255, 255, 255, .6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 0.75rem;
+            overflow: hidden;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .avatar-email {
+            font-size: 0.78rem;
+            opacity: 0.85;
+            word-break: break-all;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0.75rem 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.85rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background .15s, color .15s;
+            cursor: pointer;
+        }
+
+        .sidebar-menu li a:hover {
+            background: #f0f7f0;
+            color: #2e7d32;
+        }
+
+        .sidebar-menu li a.active {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 3px solid #2e7d32;
+        }
+
+        .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .sidebar-divider {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 0.5rem 0;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .account-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ── CARDS ── */
+        .account-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .07);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 1.75rem;
+        }
+
+        /* ── QUICK TILES (Amazon style top row) ── */
+        .quick-tiles {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 0;
+        }
+
+        .quick-tile {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .07);
+            padding: 1.5rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .quick-tile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .13);
+            border-color: #c5e1c5;
+        }
+
+        .quick-tile-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .tile-green {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .tile-blue {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .tile-orange {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .quick-tile span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* ── PROFILE FORM ── */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .profile-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .profile-field label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .profile-field .field-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            padding: 0.65rem 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1.5px solid #eee;
+        }
+
+        .profile-field input {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            padding: 0.65rem 1rem;
+            background: #fff;
+            border-radius: 10px;
+            border: 1.5px solid #ccc;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .profile-field input:focus {
+            border-color: #2e7d32;
+        }
+
+        .field-full {
+            grid-column: 1 / -1;
+        }
+
+        /* ── ORDERS ── */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .order-card {
+            border: 1.5px solid #e8e8e8;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: box-shadow .2s;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .1);
+        }
+
+        .order-card-header {
+            background: #f8f9fa;
+            padding: 1rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-meta-label {
+            font-size: 0.72rem;
+            color: #888;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: .05em;
+            margin-bottom: 0.2rem;
+        }
+
+        .order-meta-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .order-status-badge {
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-confirmed {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-pending {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .status-delivered {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .order-items-body {
+            padding: 1.25rem 1.5rem;
+        }
+
+        .order-item-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .order-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: #f0f7f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .order-item-name {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.92rem;
+        }
+
+        .order-item-qty {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .order-item-price {
+            font-weight: 700;
+            color: #2e7d32;
+            font-size: 0.92rem;
+        }
+
+        .empty-orders {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: #aaa;
+        }
+
+        .empty-orders i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        /* ── SETTINGS ── */
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-section h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #888;
+            margin-bottom: 0.75rem;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+
+        .settings-row-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .settings-row-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1a1a1a;
+        }
+
+        .settings-row-desc {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.1rem;
+        }
+
+        /* Toggle switch */
+        .toggle-switch {
+            position: relative;
+            width: 46px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #ccc;
+            border-radius: 26px;
+            cursor: pointer;
+            transition: background .3s;
+        }
+
+        .toggle-slider:before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            top: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform .3s;
+        }
+
+        .toggle-switch input:checked+.toggle-slider {
+            background: #2e7d32;
+        }
+
+        .toggle-switch input:checked+.toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Danger zone */
+        .danger-btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            border: 1.5px solid #ef5350;
+            background: transparent;
+            color: #ef5350;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: background .15s, color .15s;
+        }
+
+        .danger-btn:hover {
+            background: #ef5350;
+            color: #fff;
+        }
+
+        /* ── LOADING SKELETON ── */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-shine 1.2s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes skeleton-shine {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .account-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                position: static;
+            }
+
+            .quick-tiles {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-card-header {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-seedling"></i> ThaniyamHub
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Shop Millets</a>
+                <a href="cart.html" style="position:relative;">
+                    <i class="fa-solid fa-cart-shopping"></i> Cart
+                    <span id="cart-count"
+                        style="display:none;position:absolute;top:-8px;right:-12px;background:var(--error);color:white;border-radius:50%;padding:2px 6px;font-size:0.7rem;font-weight:bold;">0</span>
+                </a>
+                <div id="auth-links" style="display:flex;align-items:center;gap:1rem;"></div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="account-wrapper">
+
+            <!-- ── SIDEBAR ── -->
+            <aside class="profile-sidebar">
+                <div class="profile-avatar-box">
+                    <div class="avatar-circle" id="sidebar-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="avatar-name" id="sidebar-name">Loading…</div>
+                    <div class="avatar-email" id="sidebar-email"></div>
+                </div>
+
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="#" class="active" id="tab-home-link" onclick="switchTab('home'); return false;">
+                            <i class="fa-solid fa-house"></i> Account Home
+                        </a>
+                    </li>
+                    <hr class="sidebar-divider">
+                    <li>
+                        <a href="#" id="tab-orders-link" onclick="switchTab('orders'); return false;">
+                            <i class="fa-solid fa-box"></i> My Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="tab-profile-link" onclick="switchTab('profile'); return false;">
+                            <i class="fa-solid fa-circle-user"></i> Profile
+                        </a>
+                    </li>
+                    <hr class="sidebar-divider">
+                    <li>
+                        <a href="#" id="tab-settings-link" onclick="switchTab('settings'); return false;">
+                            <i class="fa-solid fa-gear"></i> Settings
+                        </a>
+                    </li>
+                    <hr class="sidebar-divider">
+                    <li>
+                        <a href="#" onclick="Auth.logout(); return false;" style="color:#ef5350;">
+                            <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- ── MAIN CONTENT ── -->
+            <div class="account-content">
+
+                <!-- HOME TAB -->
+                <div id="tab-home" class="tab-panel active">
+                    <div class="quick-tiles">
+                        <div class="quick-tile" onclick="switchTab('orders')">
+                            <div class="quick-tile-icon tile-green">
+                                <i class="fa-solid fa-box"></i>
+                            </div>
+                            <span>My Orders</span>
+                        </div>
+                        <div class="quick-tile" onclick="switchTab('profile')">
+                            <div class="quick-tile-icon tile-blue">
+                                <i class="fa-solid fa-circle-user"></i>
+                            </div>
+                            <span>Profile</span>
+                        </div>
+                        <div class="quick-tile" onclick="switchTab('settings')">
+                            <div class="quick-tile-icon tile-orange">
+                                <i class="fa-solid fa-gear"></i>
+                            </div>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+
+                    <div class="account-card" style="margin-top:1.5rem;">
+                        <div class="card-header">
+                            <h2>Recent Orders</h2>
+                            <a href="#" onclick="switchTab('orders'); return false;"
+                                style="font-size:0.88rem;color:#2e7d32;font-weight:600;">View all <i
+                                    class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                        <div class="card-body" id="home-recent-orders">
+                            <div style="height:60px;" class="skeleton"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORDERS TAB -->
+                <div id="tab-orders" class="tab-panel">
+                    <div class="account-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-box" style="color:#2e7d32;margin-right:.5rem;"></i> My Orders</h2>
+                        </div>
+                        <div class="card-body" id="orders-container">
+                            <div style="height:80px;" class="skeleton"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROFILE TAB -->
+                <div id="tab-profile" class="tab-panel">
+                    <div class="account-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-circle-user" style="color:#1565c0;margin-right:.5rem;"></i>
+                                Profile Information</h2>
+                            <button class="btn btn-primary" id="edit-profile-btn" onclick="toggleEditProfile()"
+                                style="padding:.45rem 1.1rem;font-size:.88rem;">
+                                <i class="fa-solid fa-pen"></i> Edit
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <form id="profile-form" onsubmit="saveProfile(event)">
+                                <div class="profile-grid">
+                                    <div class="profile-field">
+                                        <label>Full Name</label>
+                                        <div class="field-value" id="pf-name-view">—</div>
+                                        <input type="text" id="pf-name-edit" placeholder="Full Name"
+                                            style="display:none;">
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Email Address</label>
+                                        <div class="field-value" id="pf-email-view">—</div>
+                                        <input type="email" id="pf-email-edit" placeholder="Email" style="display:none;"
+                                            readonly>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Phone Number</label>
+                                        <div class="field-value" id="pf-phone-view">Not set</div>
+                                        <input type="tel" id="pf-phone-edit" placeholder="+91 XXXXX XXXXX"
+                                            style="display:none;">
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Member Since</label>
+                                        <div class="field-value" id="pf-since">—</div>
+                                    </div>
+                                    <div class="profile-field field-full">
+                                        <label>Default Address</label>
+                                        <div class="field-value" id="pf-address-view">Not set</div>
+                                        <input type="text" id="pf-address-edit" placeholder="Street, City, PIN"
+                                            style="display:none;">
+                                    </div>
+                                </div>
+                                <div id="profile-save-row"
+                                    style="margin-top:1.25rem;display:none;gap:.75rem;justify-content:flex-end;display:none;">
+                                    <button type="button" onclick="cancelEditProfile()"
+                                        style="padding:.55rem 1.2rem;border-radius:10px;border:1.5px solid #ccc;background:transparent;cursor:pointer;font-weight:600;">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" style="padding:.55rem 1.4rem;">Save
+                                        Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS TAB -->
+                <div id="tab-settings" class="tab-panel">
+                    <div class="account-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-gear" style="color:#e65100;margin-right:.5rem;"></i> Settings</h2>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="settings-section">
+                                <h3>Notifications</h3>
+                                <div class="settings-row">
+                                    <div class="settings-row-left">
+                                        <div class="settings-icon tile-green"><i class="fa-solid fa-envelope"></i></div>
+                                        <div>
+                                            <div class="settings-row-title">Order Confirmation Emails</div>
+                                            <div class="settings-row-desc">Receive email after every order</div>
+                                        </div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-email" checked
+                                            onchange="saveSetting('emailNotify', this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-row-left">
+                                        <div class="settings-icon tile-blue"><i class="fa-solid fa-bell"></i></div>
+                                        <div>
+                                            <div class="settings-row-title">Promotional Offers</div>
+                                            <div class="settings-row-desc">Get notified about sales & offers</div>
+                                        </div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-promo"
+                                            onchange="saveSetting('promoNotify', this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-section">
+                                <h3>Account</h3>
+                                <div class="settings-row">
+                                    <div class="settings-row-left">
+                                        <div class="settings-icon tile-orange"><i class="fa-solid fa-lock"></i></div>
+                                        <div>
+                                            <div class="settings-row-title">Change Password</div>
+                                            <div class="settings-row-desc">Send a password reset email</div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="sendPasswordReset()"
+                                        style="padding:.5rem 1.1rem;font-size:.85rem;">
+                                        Send Reset Email
+                                    </button>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-row-left">
+                                        <div class="settings-icon" style="background:#fce4ec;color:#c62828;"><i
+                                                class="fa-solid fa-right-from-bracket"></i></div>
+                                        <div>
+                                            <div class="settings-row-title">Sign Out</div>
+                                            <div class="settings-row-desc">Sign out from this device</div>
+                                        </div>
+                                    </div>
+                                    <button class="danger-btn" onclick="Auth.logout()">Sign Out</button>
+                                </div>
+                            </div>
+
+                            <div class="settings-section">
+                                <h3>Danger Zone</h3>
+                                <div class="settings-row">
+                                    <div class="settings-row-left">
+                                        <div class="settings-icon" style="background:#fce4ec;color:#c62828;"><i
+                                                class="fa-solid fa-trash"></i></div>
+                                        <div>
+                                            <div class="settings-row-title">Delete Account</div>
+                                            <div class="settings-row-desc">Permanently delete your account & data</div>
+                                        </div>
+                                    </div>
+                                    <button class="danger-btn" onclick="confirmDeleteAccount()">Delete Account</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.account-content -->
+        </div><!-- /.account-wrapper -->
+    </main>
+
+    <footer style="background:#fff;border-top:1px solid var(--border-color);padding:2rem 0;margin-top:2rem;">
+        <div class="container" style="text-align:center;color:var(--text-muted);">
+            <p>&copy; 2026 ThaniyamHub. Designed with <i class="fa-solid fa-heart" style="color:var(--error);"></i> for
+                your health.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js?v=1.0.4"></script>
+
+    <script>
+        // ── TAB SWITCHING ──
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu li a').forEach(a => a.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('tab-' + tab + '-link').classList.add('active');
+
+            if (tab === 'orders') loadOrders();
+        }
+
+        // ── LOAD ORDERS (from localStorage history) ──
+        function loadOrders() {
+            const container = document.getElementById('orders-container');
+            const homeContainer = document.getElementById('home-recent-orders');
+            const history = JSON.parse(localStorage.getItem('thaniyam_order_history') || '[]');
+
+            if (history.length === 0) {
+                const empty = `
+                    <div class="empty-orders">
+                        <i class="fa-solid fa-box-open"></i>
+                        <p style="font-size:1.05rem;font-weight:600;color:#555;">No orders yet</p>
+                        <p style="margin-bottom:1.25rem;">Looks like you haven't placed any orders.</p>
+                        <a href="products.html" class="btn btn-primary">Shop Now</a>
+                    </div>`;
+                container.innerHTML = empty;
+                homeContainer.innerHTML = empty;
+                return;
+            }
+
+            const renderOrders = (orders) => orders.map(o => {
+                const date = new Date(o.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                const payLabels = { GPay: 'Google Pay', Card: 'Card', NetBanking: 'Net Banking', COD: 'Cash on Delivery' };
+                const items = (o.items || []).map(item => `
+                    <div class="order-item-row">
+                        <div class="order-item-img">🌾</div>
+                        <div class="order-item-name">${item.name}</div>
+                        <div class="order-item-qty">x${item.cartQuantity}</div>
+                        <div class="order-item-price">Rs.${(item.price * item.cartQuantity).toFixed(2)}</div>
+                    </div>`).join('');
+
+                return `
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <div>
+                            <div class="order-meta-label">Order ID</div>
+                            <div class="order-meta-value">#${(o.orderId || '').substring(0, 8).toUpperCase()}</div>
+                        </div>
+                        <div>
+                            <div class="order-meta-label">Date</div>
+                            <div class="order-meta-value">${date}</div>
+                        </div>
+                        <div>
+                            <div class="order-meta-label">Total</div>
+                            <div class="order-meta-value" style="color:#2e7d32;">Rs.${parseFloat(o.totalAmount).toFixed(2)}</div>
+                        </div>
+                        <div>
+                            <span class="order-status-badge status-confirmed">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="order-items-body">${items}</div>
+                </div>`;
+            }).join('');
+
+            container.innerHTML = `<div class="orders-list">${renderOrders(history)}</div>`;
+            homeContainer.innerHTML = `<div class="orders-list">${renderOrders(history.slice(0, 2))}</div>`;
+        }
+
+        // ── PROFILE EDIT ──
+        let editMode = false;
+        function toggleEditProfile() {
+            editMode = true;
+            ['name', 'phone', 'address'].forEach(f => {
+                document.getElementById('pf-' + f + '-view').style.display = 'none';
+                document.getElementById('pf-' + f + '-edit').style.display = '';
+            });
+            document.getElementById('pf-email-edit').style.display = '';
+            document.getElementById('pf-email-view').style.display = 'none';
+            document.getElementById('profile-save-row').style.display = 'flex';
+            document.getElementById('edit-profile-btn').style.display = 'none';
+        }
+
+        function cancelEditProfile() {
+            editMode = false;
+            ['name', 'phone', 'address'].forEach(f => {
+                document.getElementById('pf-' + f + '-view').style.display = '';
+                document.getElementById('pf-' + f + '-edit').style.display = 'none';
+            });
+            document.getElementById('pf-email-edit').style.display = 'none';
+            document.getElementById('pf-email-view').style.display = '';
+            document.getElementById('profile-save-row').style.display = 'none';
+            document.getElementById('edit-profile-btn').style.display = '';
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            const phone = document.getElementById('pf-phone-edit').value;
+            const address = document.getElementById('pf-address-edit').value;
+            const localUser = JSON.parse(localStorage.getItem('thaniyam_user') || '{}');
+            localUser.phone = phone;
+            localUser.address = address;
+            localStorage.setItem('thaniyam_user', JSON.stringify(localUser));
+            document.getElementById('pf-phone-view').textContent = phone || 'Not set';
+            document.getElementById('pf-address-view').textContent = address || 'Not set';
+            cancelEditProfile();
+            showToast('Profile updated!');
+        }
+
+        // ── SETTINGS ──
+        function saveSetting(key, value) {
+            const settings = JSON.parse(localStorage.getItem('thaniyam_settings') || '{}');
+            settings[key] = value;
+            localStorage.setItem('thaniyam_settings', JSON.stringify(settings));
+            showToast('Setting saved!');
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('thaniyam_settings') || '{}');
+            if (settings.emailNotify !== undefined) document.getElementById('toggle-email').checked = settings.emailNotify;
+            if (settings.promoNotify !== undefined) document.getElementById('toggle-promo').checked = settings.promoNotify;
+        }
+
+        function sendPasswordReset() {
+            const user = firebase.auth().currentUser;
+            if (!user) return showToast('Not logged in', 'error');
+            firebase.auth().sendPasswordResetEmail(user.email).then(() => {
+                showToast('Password reset email sent to ' + user.email);
+            }).catch(err => showToast(err.message, 'error'));
+        }
+
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to permanently delete your account? This cannot be undone.')) {
+                const user = firebase.auth().currentUser;
+                if (!user) return showToast('Not logged in', 'error');
+                user.delete().then(() => {
+                    localStorage.clear();
+                    window.location.href = 'index.html';
+                }).catch(err => showToast('Re-login required before deleting: ' + err.message, 'error'));
+            }
+        }
+
+        // ── BOOT ──
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+
+            // Deep-link: open tab from navbar dropdown or URL hash
+            const deepTab = localStorage.getItem('profileTab') || (location.hash === '#orders' ? 'orders' : null);
+            if (deepTab) {
+                switchTab(deepTab);
+                localStorage.removeItem('profileTab');
+            }
+
+            firebase.auth().onAuthStateChanged(user => {
+                if (!user) {
+                    // Not logged in — redirect to login
+                    window.location.href = 'login.html?mode=login&redirect=profile.html';
+                    return;
+                }
+
+                // Populate sidebar
+                const emailPart = user.email ? user.email.split('@')[0] : 'User';
+                const name = user.displayName || emailPart;
+                document.getElementById('sidebar-name').textContent = name;
+                document.getElementById('sidebar-email').textContent = user.email || '';
+
+                const avatarEl = document.getElementById('sidebar-avatar');
+                if (user.photoURL && user.photoURL !== 'null') {
+                    avatarEl.innerHTML = `<img src="${user.photoURL}" alt="Avatar" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='${name.charAt(0).toUpperCase()}';">`;
+                } else {
+                    avatarEl.innerHTML = name.charAt(0).toUpperCase();
+                }
+
+                // Populate profile tab
+                const localUser = JSON.parse(localStorage.getItem('thaniyam_user') || '{}');
+                document.getElementById('pf-name-view').textContent = name;
+                document.getElementById('pf-name-edit').value = name;
+                document.getElementById('pf-email-view').textContent = user.email;
+                document.getElementById('pf-email-edit').value = user.email;
+                document.getElementById('pf-phone-view').textContent = localUser.phone || 'Not set';
+                document.getElementById('pf-phone-edit').value = localUser.phone || '';
+                document.getElementById('pf-address-view').textContent = localUser.address || 'Not set';
+                document.getElementById('pf-address-edit').value = localUser.address || '';
+
+                const since = user.metadata?.creationTime
+                    ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
+                    : '—';
+                document.getElementById('pf-since').textContent = since;
+
+                // Load home recent orders
+                loadOrders();
+            });
+        });
+    </script>
+
+</body>
+
+</html>

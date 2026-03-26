@@ -1,0 +1,15 @@
+<?php
+// backend/db.config.php.example
+// Copy this file to db.config.php and update with your local database credentials
+
+$host = 'localhost';
+$user = 'root';
+$pass = ''; // Your MySQL password
+$dbname = 'thaniyamhub';
+
+$conn = new mysqli($host, $user, $pass, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>

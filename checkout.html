@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | ThaniyamHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkout-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .form-section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 576px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(47, 158, 68, 0.1);
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-color);
+        }
+
+        .payment-option input {
+            width: auto;
+        }
+
+        .order-summary-mini {
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 1rem;
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-seedling"></i> ThaniyamHub
+            </a>
+            <div class="nav-links">
+                <a href="products.html">Shop Millets</a>
+                <a href="cart.html">Cart</a>
+                <div id="auth-links"></div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1 style="font-size: 2.5rem; margin-top: 2rem;">Checkout</h1>
+
+        <form id="checkout-form">
+            <div class="checkout-layout">
+                <div class="checkout-main">
+                    <!-- Shipping Section -->
+                    <div class="checkout-card">
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-truck"></i> Shipping Information
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="shippingName">Full Name</label>
+                                <input type="text" id="shippingName" required placeholder="Enter your full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" required placeholder="E.g. +91 9876543210">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" required readonly>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="address">Street Address</label>
+                                <textarea id="address" rows="3" required
+                                    placeholder="House No, Street name, Locality"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" required placeholder="Enter city name">
+                            </div>
+                            <div class="form-group">
+                                <label for="pinCode">Pin Code</label>
+                                <input type="text" id="pinCode" required placeholder="6-digit code">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Section -->
+                    <div class="checkout-card">
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-credit-card"></i> Payment Method
+                        </div>
+                        <div class="payment-methods">
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="GPay" checked>
+                                <i class="fa-brands fa-google-pay fa-2x"></i>
+                                <span>Google Pay / UPI</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="Card">
+                                <i class="fa-solid fa-credit-card fa-lg"></i>
+                                <span>Credit / Debit Card</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="NetBanking">
+                                <i class="fa-solid fa-building-columns fa-lg"></i>
+                                <span>Net Banking</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="COD">
+                                <i class="fa-solid fa-hand-holding-dollar fa-lg"></i>
+                                <span>Cash on Delivery</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-summary-mini">
+                    <div class="checkout-card">
+                        <h3 style="margin-bottom: 1.5rem;">Order Summary</h3>
+                        <div id="summary-items-list">
+                            <!-- Items will be listed here -->
+                        </div>
+                        <div class="summary-item" style="margin-top: 1rem;">
+                            <span>Subtotal</span>
+                            <span id="subtotal">₹0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Shipping</span>
+                            <span style="color: var(--primary-color);">FREE</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total</span>
+                            <span id="total">₹0.00</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary"
+                            style="width: 100%; margin-top: 2rem; font-size: 1.1rem; padding: 1rem;">
+                            Place Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <!-- Firebase SDK (v8 Compat for Auth) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js?v=1.0.3"></script>
+    <!-- EmailJS SDK for sending confirmation emails -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your public key
+        (function () {
+            emailjs.init({ publicKey: '2-2Hs6UgF_SF8UiyQ' });
+        })();
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = Auth.getUser();
+            if (!user) {
+                window.location.href = 'login.html?redirect=checkout.html';
+                return;
+            }
+
+            // Fill email and name from login session
+            document.getElementById('email').value = user.email;
+            document.getElementById('shippingName').value = user.fullname || '';
+
+            // Render order summary from cart
+            renderSummary();
+
+            // Handle Form Submission
+            const form = document.getElementById('checkout-form');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const btn = form.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+
+                const cart = Cart.getItems();
+                if (!cart || cart.length === 0) {
+                    showToast('Your cart is empty!', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                    return;
+                }
+
+                try {
+                    // Mapping Firebase User to Local MySQL User
+                    // For local development on XAMPP, we'll use a fixed user_id (1) or try to register/login silently.
+                    // Ideally, the user should have been created in MySQL during registration.
+                    // For now, let's assume user_id 1 exists or use a guest ID if the API allows.
+                    // Since orders.php requires user_id, we'll use 1 as it's the most common starting ID.
+                    
+                    const orderPayload = {
+                        user_id: 1, // Fallback for local XAMPP testing
+                        total_amount: parseFloat(Cart.getTotal()),
+                        items: cart.map(item => ({
+                            product_id: item.id,
+                            quantity: parseInt(item.cartQuantity),
+                            price: parseFloat(item.price)
+                        }))
+                    };
+
+                    // Send to local PHP API
+                    const response = await fetch('backend/api/orders.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(orderPayload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        const orderId = result.order_id;
+                        console.log("✓ Order created:", orderId);
+
+                        // Clear cart
+                        Cart.clear();
+
+                        // Build items summary for localStorage history
+                        const newOrder = {
+                            orderId: orderId.toString(),
+                            date: new Date().toISOString(),
+                            email: user.email,
+                            shippingName: document.getElementById('shippingName').value,
+                            totalAmount: orderPayload.total_amount,
+                            items: cart
+                        };
+
+                        const history = JSON.parse(localStorage.getItem('thaniyam_order_history') || '[]');
+                        history.unshift(newOrder);
+                        localStorage.setItem('thaniyam_order_history', JSON.stringify(history));
+                        sessionStorage.setItem('lastOrder', JSON.stringify(newOrder));
+
+                        window.location.href = 'order-success.html';
+                    } else {
+                        throw new Error(result.message || 'Failed to place order');
+                    }
+
+                } catch (error) {
+                    console.error("Checkout Error:", error);
+                    showToast('Order Error: ' + (error.message || 'Unknown error'), 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            });
+        });
+
+        function renderSummary() {
+            const list = document.getElementById('summary-items-list');
+            const cart = Cart.getItems();
+
+            if (cart.length === 0) {
+                window.location.href = 'products.html';
+                return;
+            }
+
+            let html = '';
+            cart.forEach(item => {
+                html += `
+                    <div class="summary-item">
+                        <span>${item.name} x ${item.cartQuantity}</span>
+                        <span>₹${(item.price * item.cartQuantity).toFixed(2)}</span>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+
+            const total = Cart.getTotal();
+            document.getElementById('subtotal').textContent = `₹${total.toFixed(2)}`;
+            document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+
+</html>
